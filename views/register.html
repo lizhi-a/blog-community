@@ -39,28 +39,41 @@
   </div>
   <script src="/node_modules/jquery/dist/jquery.js"></script>
   <script>
-    $('#register_form').on('submit', e => {
+    // $('#register_form').on('submit', e => {
+    //   e.preventDefault()
+    //   if($("#password").val().length < 6){
+    //     window.alert("密码必须不少于6位字符！")
+    //     return false
+    //   }
+    //   const formData = $('#register_form').serialize()
+    //   $.ajax({
+    //     url: '/register',
+    //     type: 'post',
+    //     data: formData,
+    //     dataType: 'json',
+    //     success: data => {
+    //       const err_code = data.err_code
+    //       if(err_code === 0){
+    //         window.alert('注册成功！')
+    //         window.location.href = '/'
+    //       } else if(err_code === 1){
+    //         window.alert('邮箱已存在！')
+    //       } else if(err_code === 500){
+    //         window.alert("服务器忙，请稍后重试！")
+    //       }
+    //     }
+    //   })
+    // })
+    $('#register_form').on('click', e => {
       e.preventDefault()
-      if($("#password").val().length < 6){
-        window.alert("密码必须不少于6位字符！")
-        return false
-      }
-      const formData = $('#register_form').serialize()
+      var formData = $(this).serialize()
       $.ajax({
         url: '/register',
         type: 'post',
         data: formData,
         dataType: 'json',
         success: data => {
-          const err_code = data.err_code
-          if(err_code === 0){
-            window.alert('注册成功！')
-            window.location.href = '/'
-          } else if(err_code === 1){
-            window.alert('邮箱已存在！')
-          } else if(err_code === 500){
-            window.alert("服务器忙，请稍后重试！")
-          }
+          console.log(data)
         }
       })
     })
