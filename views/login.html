@@ -12,9 +12,9 @@
 <body>
   <div class="main">
     <div class="header">
-      <a href="/">
+      <!-- <a href="/">
         <img src="/public/img/logo3.png" alt="" width="200px">
-      </a>
+      </a> -->
       <br>
       <br>
       <h1>用户登录</h1>
@@ -32,13 +32,14 @@
       </div>
       <div class="checkbox">
         <label>
-          <input type="checkbox">记住我
+          <input type="checkbox"> 记住我
         </label>
       </div>
       <button type="submit" class="btn btn-success btn-block">登录</button>
     </form>
     <div class="message">
-      <p>没有账号? <a href="/register">点击创建</a>.</p>
+      <span>没有账号? <a href="/register">点击创建</a></span>
+      <a href="/" class="pull-right">回首页</a></p>
     </div>
   </div>
   <script src="/node_modules/jquery/dist/jquery.js"></script>
@@ -55,7 +56,7 @@
           const err_code = data.err_code
           if (err_code === 0) {
             // window.alert('注册成功！')
-            // 服务端重定向针对异步请求无效
+            // 服务端重定向针对异步请求无效，只针对同步请求
             window.location.href = '/'
           } else if (err_code === 1) {
             window.alert('此邮箱还未注册，请先注册后登录！')

@@ -11,12 +11,18 @@
 <body>
   <div class="main">
     <div class="header">
-      <a href="/">
+      <!-- <a href="/">
         <img src="/public/img/logo3.png" alt="" width="200px">
-      </a>
+      </a> -->
       <br><br>
       <h1>用户注册</h1>
       <br>
+      <!-- 
+        表单有默认提交行为，默认是同步的，同步表单提交，浏览器会锁死（转圈等）
+        服务器要等待响应
+
+
+       -->
     </div>
     <form id="register_form">
       <div class="form-group">
@@ -34,7 +40,8 @@
       <button type="submit" class="btn btn-success btn-block">注册</button>
     </form>
     <div class="message">
-      <p>已有账号? <a href="/login">点击登录</a>.</p>
+      <span>已有账号? <a href="/login">点击登录</a></span>
+      <a href="/" class="pull-right">回首页</a></p>
     </div>
   </div>
   <script src="/node_modules/jquery/dist/jquery.js"></script>
@@ -46,6 +53,7 @@
     //     return false
     //   }
     //   const formData = $('#register_form').serialize()
+    //   console.log(formData)
     //   $.ajax({
     //     url: '/register',
     //     type: 'post',
@@ -64,16 +72,28 @@
     //     }
     //   })
     // })
-    $('#register_form').on('click', e => {
+    $('#register_form').on('submit', e => {
+      //组织默认事件
       e.preventDefault()
-      var formData = $(this).serialize()
+      //表单序列化
+      var formData = $('#register_form').serialize()
       $.ajax({
         url: '/register',
         type: 'post',
         data: formData,
         dataType: 'json',
         success: data => {
-          console.log(data)
+          var err_code = data.err_code
+          if(err_code === 0){
+            window.alert('注册成功！')
+            // 服务端重定向针对异步请求无效，只针对同步请求
+            // 所以客户端进行跳转
+            window.location.href = '/'
+          }else if(err_code === 1){
+            window.alert('邮箱或昵称已存在')
+          }else if(err_code === 500){
+            window.alert('服务器忙，请稍后重试！')
+          }
         }
       })
     })
