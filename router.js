@@ -5,8 +5,10 @@ var md5 = require('blueimp-md5')
 var router = express.Router()
 
 router.get('/',function(req,res){
-    console.log(req.session.isLogin)
-    res.render('index.html')
+    // console.log(req.session.user)
+    res.render('index.html',{
+        user:req.session.user
+    })
 })
 
 router.get('/login',function(req,res){
@@ -14,7 +16,35 @@ router.get('/login',function(req,res){
 })
 
 router.post('/login',function(req,res){
-    
+    // 1.获取表单数据
+    // 2.查询数据库，邮箱密码是否正确
+    // 3.发送响应数据
+    var body = req.body
+    User.findOne({
+        email : body.email,
+        password : md5(md5(body.password))
+    },function(err,user){
+        if(err){
+            return res.status(500).json({
+                err_code:500,
+                message:err.message
+            })
+        }
+
+        if(!user){
+            return res.status(200).json({
+                err_code:1,
+                message:'email or password is invalid'
+            })
+        }
+
+        // 用户存在，登录成功，记录登录状态
+        req.session.user = user
+        res.status(200).json({
+            err_code:0,
+            message:'OK'
+        })
+    })
 })
 
 router.get('/register',function(req,res){
@@ -58,7 +88,7 @@ router.post('/register',function(req,res){
             })
         }
         //对密码进行加密
-        body.password = md5(md5(body.password))
+        body.password = md5(md5(body.password) + 'itcast')
 
         new User(body).save(function(err,user){
             if(err){
@@ -68,7 +98,7 @@ router.post('/register',function(req,res){
                 })
             }
             // 注册成功，使用session记录用户的登录状态
-            req.session.isLogin = true
+            req.session.user = user
 
             res.status(200).json({
                 err_code:0,
@@ -76,6 +106,13 @@ router.post('/register',function(req,res){
             })
         })
     })
+})
+
+router.get('/logout',function(req,res){
+    // 清楚登录状态
+    // 重定向到登录页，<a>链接是同步请求，所以可以服务端重定向
+    req.session.user = null
+    res.redirect('/')
 })
 
 module.exports = router
