@@ -148,6 +148,7 @@ router.post('/topics/new',function(req,res){
     //3.发送响应
     var body = req.body
     body.nickname = req.session.user.nickname
+    body.userId = req.session.user._id
     new Topic(body).save(function(err,data){
         if(err){
             return res.status(500).json({
@@ -297,8 +298,9 @@ router.get('/settings/delete',function(req,res){
 })
 
 router.get('/settings/myblog',function(req,res){
+    // console.log(req.session)
     Topic.find({
-        nickname:req.session.user.nickname
+        userId:req.session.user._id
     },function(err,topics){
         if(err){
             return res.status(500).json({
@@ -333,7 +335,6 @@ router.get('/topics/myblog_show',function(req,res){
                     message:'Server error'
                 })
             }
-            // console.log(comments)
             res.render('topic/myblog_show.html',{
                 topic:topic,
                 user:req.session.user,
@@ -399,7 +400,7 @@ router.post('/myblog/update',function(req,res){
             })
         }
         res.status(200).json({
-            id:id,
+            id:body.id,
             err_code:0,
             message:'OK'
         })

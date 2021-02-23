@@ -32,6 +32,10 @@ var topicSchema = new Schema({
     last_modified_time:{
         type:Date,
         default:Date.now
+    },
+    userId:{
+        type:String,
+        required:true
     }
 })
 
