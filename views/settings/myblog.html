@@ -1,0 +1,37 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'body'}}
+<section class="container">
+  <ul class="media-list">
+    <h1 style="display: inline-block; font-weight: 600;color:#018ab8;margin-bottom: 30px;">我的文章</h1>
+    {{each topics item i}}
+    <li class="media">
+      <div class="media-left">
+        <a href="#">
+            <img width="40" height="40" style="border-radius: 50%;" class="media-object" src="../public/img/avatar-default.png" alt="...">
+        </a>
+      </div>
+      <div class="media-body" style="position: relative;">
+        <h4 class="media-heading" style="display: inline-block;">
+          <a href="/topics/myblog_show?id={{item._id}}">{{item.title}}</a>
+        </h4>
+        <a href="/settings/myblog/delete?id={{item._id}}" class="delete_myblog">删除</a>
+        <div class="media_content">
+          {{item.article}}
+        </div>
+        <!-- <p>...</p> -->
+        <p style="color: #636466;">{{if item.model==0}}分享
+          {{else if item.model==1}}问答
+          {{else if item.model==2}}客户端测试
+          {{else}}测试
+          {{/if}}
+          <!-- • {{item.created_time}}</p> -->
+          • {{item.created_time}}</p>
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+</section>
+{{/block}}

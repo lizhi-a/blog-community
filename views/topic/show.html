@@ -3,10 +3,82 @@
 {{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
 
 {{block 'head'}}
-<link rel="stylesheet" href="/public/css/markdown-github.css">
+<link rel="stylesheet" href="../../public/css/markdown-github.css">
 <style>
   .panel .panel-heading .action i {
     margin-right: 10px;
+  }
+  .reply{
+    min-height: 40px;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+  }
+  .reply_box{
+      position: relative;
+      padding: 10px;
+      padding-bottom: 0px;
+      min-height: 50px;
+  }
+  .reply_box img{
+      float: left;
+      width:40px;
+      height:40px;
+      border-radius: 50%;
+  }
+  .reply_user{
+      display: inline-block;
+      line-height: 25px;
+      width:86%;
+      margin-left: 10px;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    overflow: hidden;
+    text-overflow: clip;
+    word-wrap: normal;
+    word-break: break-all;
+
+  }
+  .reply_deletebox{
+    position: relative;
+    width:88%;
+    margin-left: 40px;
+    margin-bottom: 10px;
+  }
+  .reply_time{
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 14px;
+      color:#808080;
+  }
+  .reply_delete{
+    display: none;
+    /* display: inline-block; */
+    position: absolute;
+    right: 10px;
+    width: 50px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    background:#018ab8;
+    border: 1px solid #018ab8;
+    color: #fff;
+    box-shadow: 0px 1px 2px rgba(0,0,0,0.25);
+  }
+  #comments_form{
+    margin-top: 20px;
+  }
+  #_2{
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    white-space: pre-line;
+    
+    min-height: 30px;
+    margin-bottom: 10px;
+    padding: 10px;
+    overflow: hidden;
+    text-overflow: clip;
+    word-wrap: normal;
+    word-break: break-all;
   }
 </style>
 {{/block}}
@@ -18,35 +90,34 @@
       <article class="markdown-body">
       <h1 id="_1">{{topic.title}}</h1>
       <blockquote>
-        <p>{{topic.nickname}}</p>
+        <p>作者 ：{{topic.nickname}}</p>
+        <p>板块 ：{{if topic.model==0}}分享
+          {{else if topic.model==1}}问答
+          {{else if topic.model==2}}客户端测试
+          {{else}}测试
+          {{/if}}</p>
       </blockquote>
-      <p id="_2">{{topic.article}}</p>
+      <div id="_2">{{topic.article}}</div>
       </article>
       {{if comments}}
+      <h3 style="font-weight:600;color:#018ab8;padding-bottom: 20px; border-bottom: 1px solid #ddd; ">评论区</h3>
       {{each comments item i}}
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <span>{{item.nickname}}</span> 评论于
-          <span>{{item.created_time | getDate}}</span>
-          <span class="action">
-            <a href=""><i class="glyphicon glyphicon-thumbs-up pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-            <a href=""><i class="glyphicon glyphicon-remove-circle pull-right"></i></a>
-          </span>
+        <div class="reply">
+          <div class="reply_box">
+            <img src="../../public/img/avatar-default.png" alt="">
+            <p class="reply_user">{{item.nickname}} : {{item.comments}}</p>
+            <button type="button" class="reply_delete">删除</button></div>    
+          <div class="reply_deletebox">
+            <span class="reply_time">{{item.created_time}}</span>
+          </div>
         </div>
-        <div class="panel-body">
-          {{item.comments}}
-        </div>
-      </div>
-      <br>
       {{/each}}
       {{ else }}
       <p>还没有评论，快来抢占沙发吧！</p>
       {{/if}}
-    <hr>
     <form id="comments_form">
       <div class="form-group">
-        <label for="">发表评论</label>
+        <label for=""><h3 style="font-weight:600;color:#018ab8;">发表评论</h3></label>
         <textarea class="form-control" cols="10" rows="5" name="comments"></textarea>
       </div>
       <button type="submit" class="btn btn-success">评论</button>
@@ -74,6 +145,8 @@
         const err_code = data.err_code
         if (err_code === 0){
           window.location.href='/topics/show?id='+id
+        }else if (err_code === 1){
+          window.alert('请您先登录！')
         }else if (err_code === 500){
           window.alert('服务器忙，请稍后重试！')
         }

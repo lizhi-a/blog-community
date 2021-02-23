@@ -4,39 +4,31 @@
 
 {{block 'body'}}
 <section class="container">
-  <ul class="media-list">
+  <ul class="media-list" style="margin-top:50px;">
     {{each topics item i}}
     <li class="media">
       <div class="media-left">
         <a href="#">
-            <img width="40" height="40" class="media-object" src="../public/img/avatar-default.png" alt="...">
-          </a>
+            <img width="40" height="40" style="border-radius: 50%;" class="media-object" src="../public/img/avatar-default.png" alt="头像">
+        </a>
       </div>
       <div class="media-body">
-        <h4 class="media-heading"><a href="/topics/show?id={{item._id}}">{{item.title}}</a></h4>
-        <p>sueysok 回复了问题 • 2 人关注 • 1 个回复 • 187 次浏览 • {{item.created_time | getDate}}</p>
+        <h4 class="media-heading">
+          <a href="/topics/show?id={{item._id}}">{{item.title}}</a>
+        </h4>
+        <div class="media_content">
+          {{item.article}}
+        </div>
+        <p style="color: #636466;">{{if item.model==0}}分享
+          {{else if item.model==1}}问答
+          {{else if item.model==2}}客户端测试
+          {{else}}测试
+          {{/if}}
+          <!-- • {{item.created_time}}</p> -->
+          • {{item.created_time}}</p>
       </div>
     </li>
     {{/each}}
   </ul>
- <nav aria-label="Page navigation">
-   <ul class="pagination">
-     <li>
-      <a href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-     </li>
-     <li class="active"><a href="#">1</a></li>
-     <li><a href="#">2</a></li>
-     <li><a href="#">3</a></li>
-     <li><a href="#">4</a></li>
-     <li><a href="#">5</a></li>
-     <li>
-        <a href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-     </a>
-     </li>
-   </ul>
-  </nav>
 </section>
 {{/block}}

@@ -1,4 +1,6 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default" 
+style="background-color:  white;box-shadow:0 2px 4px 0 rgba(0,0,0,0.05);
+position: sticky;top:0px;margin-bottom: 40px;z-index: 100;">
     <div class="container">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
@@ -9,7 +11,8 @@
           <span class="icon-bar"></span>
         </button> -->
         <a class="navbar-brand" href="/">
-          <img width="170px" src="/public/img/logo3.png" alt="">
+          <!-- <img width="40px" style="margin-left: 40px;" src="/public/img/home3.png" alt=""> -->
+          <h3 style="font-weight: 600;font-size: 30px;color:#0056b3;">首页</h3>
         </a>
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
@@ -18,18 +21,18 @@
           {{ if user }}
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-              <img width="20" height="20" src="../public/img/avatar-default.png" alt=""> 
-              <span class="caret"></span>
+              <img width="20" style="border-radius: 50%;" height="20" src="{{ user. avatar}}" alt=""> 
+              <span class="caret">{{ user.nickname }}</span>
             </a>
-            <a class="btn btn-default navbar-btn" href="/topics/new">发起</a>
+            <a class="btn btn-default navbar-btn new_article" href="/topics/new">发文章</a>
             <ul class="dropdown-menu">
-              <li class="dropdown-current-user">
-                当前登录用户: {{ user.nickname }}
-              </li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">个人主页</a></li>
-              <li><a href="/settings/profile">设置</a></li>
-              <li><a href="/logout">退出</a></li>
+              <!-- <li class="dropdown-current-user">
+                当前登录用户: {{ user.nickname }}eeeeeeeeeee
+              </li> -->
+              <!-- <li role="separator" class="divider"></li> -->
+              <li><a href="/settings/myblog">我的文章</a></li>
+              <li><a href="/settings/profile">用户设置</a></li>
+              <li><a href="/logout">退出登录</a></li>
             </ul>
           </li>
           {{ else }}

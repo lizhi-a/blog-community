@@ -1,13 +1,17 @@
 # 路由设计
 | 路径 | 方法 | get参数 | post参数 | 是否需要登录 | 备注 |
-|-----|------|------|------|------|-------|
+|------|------|--------|----------|-------------|-----|
 |/          |GET   |   |          |                |渲染首页|
 |/register  |GET   |   |          |                |渲染注册页面|
 |/register  |POST  |   |email,nickname,password  | |处理注册请求|
 |/login     |GET   |   |          |                |渲染登录页面|
-|/login     |POST| |email,password|                |处理登录请求|
+|/login     |POST| |              |email,password  |处理登录请求|
 |/logout    |GET|  |              |                |处理退出请求|
-|           |      |    |         |                |           |
+|/topics/new|GET|  |              |                |渲染新建文章页面|
+|/topics/new|POST| |        |nickname,title,article|处理新建文章请求|
+|/topics/show|GET  |    |         |                |渲染显示文章详情界面|
+|/topics/show|POST|||nickname,created_time,comments|处理提交评论请求|
+|||||||
 # 书写步骤
 - 创建目录结构
 - 整合静态页-模板页

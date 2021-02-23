@@ -41,6 +41,11 @@ app.use(session({
 //把路由挂载到app中
 app.use(router)
 
+// 配置一个 404 处理中间件
+app.use(function(req,res){
+    res.render('404.html')
+})
+
 app.listen(5000,function(){
     console.log('blog is running...')
 })

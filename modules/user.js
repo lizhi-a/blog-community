@@ -4,7 +4,6 @@ mongoose.connect('mongodb://localhost/user',{ useNewUrlParser: true ,useUnifiedT
 
 var Schema = mongoose.Schema
 
-
 var userSchema = new Schema({
     email:{
         type:String,

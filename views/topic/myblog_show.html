@@ -1,0 +1,179 @@
+{{extend '../_layouts/home.html'}}
+
+{{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
+
+{{block 'head'}}
+<link rel="stylesheet" href="/public/css/markdown-github.css">
+<style>
+  .panel .panel-heading .action i {
+    margin-right: 10px;
+  }
+  .reply{
+    min-height: 40px;
+    position: relative;
+    border-bottom: 1px solid #ddd;
+  }
+  .reply_box{
+      position: relative;
+      min-height: 40px;
+      padding: 10px;
+      padding-bottom: 0px;
+      min-height: 50px;
+  }
+  .reply_box img{
+      float: left;
+      width:40px;
+      height:40px;
+      border-radius: 50%;
+  }
+  .reply_user{
+      display: inline-block;
+      line-height: 25px;
+      width:86%;
+      min-height: 25px;
+      margin-left: 10px;
+      margin-bottom: 10px;
+      white-space: pre-line;
+    overflow: hidden;
+    text-overflow: clip;
+    word-wrap: normal;
+    word-break: break-all;
+  }
+  .reply_deletebox{
+    position: relative;
+    width:88%;
+    margin-left: 40px;
+    margin-bottom: 10px;
+  }
+  .reply_time{
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 14px;
+      color:#808080;
+  }
+  .reply:hover .reply_delete{
+    display: inline-block;
+  }
+  .reply_delete{
+    display: none;
+    position: absolute;
+    text-align: center;
+    right: 10px;
+    width: 50px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 14px;
+    border-radius: 4px;
+    background:#018ab8;
+    border: 0px;
+    color: #fff;
+    /* box-shadow: 0px 1px 2px rgba(0,0,0,0.25); */
+  }
+  .reply_delete:hover{
+    background: #ff4d4d;
+    color: #fff;
+    text-decoration: none;
+  }
+  #comments_form{
+    margin-top: 20px;
+  }
+  #_2{
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    white-space: pre;
+    /* overflow: scroll; */
+    
+    min-height: 30px;
+    margin-bottom: 10px;
+    padding: 10px;
+    overflow: hidden;
+    text-overflow: clip;
+    word-wrap: normal;
+    word-break: break-all;
+  }
+  #_1{
+    display: inline-block;
+    border-bottom: 0px;
+  }
+</style>
+{{/block}}
+
+{{block 'body'}}
+<section class="container">
+  <h1 style="display: inline-block;margin-left: 111px; font-weight: 600;
+    margin-bottom: 30px;">
+    <a style="color: #018ab8;text-decoration: none;" href="/settings/myblog">我的文章</a>
+  </h1>
+  <div class="row">
+    <div class="col-md-9">
+      <article class="markdown-body">
+      <h1 id="_1">{{topic.title}}</h1>
+      <a href="/myblog/update?id={{topic._id}}" class="update_myblog">编辑</a>
+      <hr style="height:1px;padding: 0;margin:0px 0px 20px 0px ;">
+      <blockquote>
+        <p>作者 ：{{topic.nickname}}</p>
+        <p>板块 ：{{if topic.model==0}}分享
+          {{else if topic.model==1}}问答
+          {{else if topic.model==2}}客户端测试
+          {{else}}测试
+          {{/if}}</p>
+      </blockquote>
+      <p id="_2" style="border-top: 1px solid #eee;padding-top: 20px;">{{topic.article}}</p>
+      </article>
+      {{if comments}}
+      <h3 style="font-weight:600;color:#018ab8;padding-bottom: 20px; border-bottom: 1px solid #ddd; ">评论区</h3>
+      {{each comments item i}}
+        <div class="reply">
+          <div class="reply_box">
+            <img src="../../public/img/avatar-default.png" alt="">
+            <p class="reply_user">{{item.nickname}} : {{item.comments}}</p>
+          </div>
+          <a href="/settings/myblog/comment_delete?id={{item._id}}&&articleId={{item.articleId}}" class="reply_delete">删除</button></a>
+          <div class="reply_deletebox">
+            <span class="reply_time">{{item.created_time}}</span>
+          </div>
+      </div>
+      {{/each}}
+      {{ else }}
+      <p>还没有评论，快来抢占沙发吧！</p>
+      {{/if}}
+    <form id="comments_form">
+      <div class="form-group">
+        <label for=""><h3 style="font-weight:600;color:#018ab8;">发表评论</h3></label>
+        <textarea class="form-control" cols="10" rows="5" name="comments"></textarea>
+      </div>
+      <button type="submit" class="btn btn-success">评论</button>
+    </form>
+   </div>
+  </div>
+</section>
+{{/block}}
+{{block 'script'}}
+<script>
+  $("#comments_form").on('submit',e => {
+    e.preventDefault()
+    if ($("textarea").val() === ''){
+      window.alert("还没有输入内容！")
+      return false
+    }
+    const id = $(this)[0].location.search.slice(4).replace(/\"/g,"")
+    const formData = $("#comments_form").serialize()
+    $.ajax({
+      url: "/topics/show",
+      type: "post",
+      data: formData+"&articleId="+id,
+      dataType: 'json',
+      success: data => {
+        const err_code = data.err_code
+        if (err_code === 0){
+          window.location.href='/topics/myblog_show?id='+id
+        }else if (err_code === 1){
+          window.alert('请您先登录！')
+        }else if (err_code === 500){
+          window.alert('服务器忙，请稍后重试！')
+        }
+      }
+    })
+  })
+</script>
+{{/block}}

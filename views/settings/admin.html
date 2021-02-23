@@ -1,7 +1,31 @@
 {{extend '../_layouts/home.html'}}
 
 {{block 'title'}}{{'多人博客 - 首页'}}{{/block}}
-
+{{block 'head'}}
+<style type="text/css">
+  .col-md-3{
+    display: inline-block;
+    float: left;
+    padding-right: 0px;
+    height:80vh;
+  }
+  .col-md-5{
+    display: inline-block;
+    width:65%;
+    margin-left: 110px;
+  }
+  .container{
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  .setting:hover{
+    color:#007bff;
+    background-color: #f5f6f7;
+    text-decoration: none;
+  }
+</style>
+{{/block}}
 {{block 'body'}}
 <section class="container">
   {{include '../_partials/settings-nav.html'}}
@@ -11,18 +35,18 @@
     </div>
     <hr>
     <form id="admin_form">
-      <!-- <input type="text" id="password" value="{{user.password}}" hidden> -->
+      <input type="text" id="password" value="{{user.password}}" hidden>
       <div class="form-group">
         <label for="">当前密码</label>
         <input type="password" class="form-control" id="oldPassword" name="oldPassword">
       </div>
       <div class="form-group">
         <label for="">新的密码</label>
-        <input type="password" class="form-control" id="newPassword" name="newPassword">
+        <input type="text" class="form-control" id="newPassword" name="newPassword">
       </div>
       <div class="form-group">
         <label for="">确认密码</label>
-        <input type="password" class="form-control" id="checkPassword" name="checkPassword">
+        <input type="text" class="form-control" id="checkPassword" name="checkPassword">
         <br>
         <button type="submit" class="btn btn-success">提交</button>
         <hr>
@@ -45,17 +69,21 @@
   $('#admin_form').on('submit',e => {
     e.preventDefault()
     const password = $("#password").val()
-    const oldP = md5(md5($('#oldPassword').val()))
+    // const oldP = md5(md5($('#oldPassword').val()))
+    const oldP = $('#oldPassword').val()
     const newP = $('#newPassword').val()
     const checkP = $('#checkPassword').val()
-    if (oldP !== password){
+    if (oldP != password){
       window.alert("当前密码不正确")
+    }else if (newP === '' || checkP === ''){
+      window.alert('还有未输入的内容！')
     }else if (checkP !== newP){
       window.alert("两次密码输入不一致，请检查后重新输入！")
-    }else if (newP==='' || checkP===''){
-      window.alert('还没有输入内容！')
-    }else {
-      const formData = $(this).serialize()
+    }else if (oldP === newP){
+      window.alert("新密码与旧密码一致，请重新输入！")
+    }
+    else {
+      const formData = $('#admin_form').serialize()
       $.ajax({
         url: '/settings/admin',
         type: 'post',

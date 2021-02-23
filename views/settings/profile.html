@@ -4,15 +4,30 @@
 {{block 'head'}}
 <style type="text/css">
   .form-control{
-    width: 30%;
+    width: 100%;
     height: 34px;
+  }
+  .col-md-3{
+    display: inline-block;
+    padding-right: 0px;
+    height:80vh;
+  }
+  .container{
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+  .setting:hover{
+    color:#007bff;
+    background-color: #f5f6f7;
+    text-decoration: none;
   }
 </style>
 {{/block}}
 {{block 'body'}}
 <section class="container">
   {{include '../_partials/settings-nav.html'}}
-  <div class="container">
+  <div class="container" style="width:65%;float: right;margin-left: 50px;">
     {{ if user }}
     <form id="profile_form">
       <div class="form-group">
@@ -28,8 +43,8 @@
         <textarea class="form-control" rows="3" name="bio" id="">{{user.bio}}</textarea>
       </div>
       <div class="form-group">
-        <label for="">性别</label>
-        <div>
+        <label for="">性别&nbsp;&nbsp;&nbsp;</label>
+        <!-- <div> -->
           <label class="radio-inline">
             <input type="radio" name="gender" id="inlineRadio1" value="-1" {{ user.gender==-1?'checked':null }}> 男
           </label>
@@ -39,10 +54,10 @@
           <label class="radio-inline">
             <input type="radio" name="gender" id="inlineRadio3" value="0" {{ user.gender==0?'checked':null }} > 保密
           </label>
-        </div>
+        <!-- </div> -->
       </div>
       <div class="form-group">
-        <label for="">头像设置</label>
+        <label for="">头像设置&nbsp;&nbsp;&nbsp;</label>
         <input id="input-id" type="file" name="avatar">
       </div>
       <button type="submit" class="btn btn-success">保存</button>
@@ -53,21 +68,21 @@
 {{/block}}
 {{block 'script'}}
 <script>
-  $("#input-id").fileinput({
-    uploadUrl:"/public/img", //接受请求地址
-    language:'zh',
-    showRemove:false,
-    showUpload:false,
-    autoReplace: true,
-    allowedFileTypes : [ 'image' ],//配置允许文件上传的类型
-    allowedPreviewTypes : [ 'image' ],//配置所有的被预览文件类型
-    allowedPreviewMimeTypes : [ 'jpg', 'png'],//控制被预览的所有mime类型
-    dropZoneEnabled:false, //是否显示拖拽区域
-    enctype : 'multipart/form-data',
-  });
+  // $("#input-id").fileinput({
+  //   uploadUrl:"/public/img", //接受请求地址
+  //   language:'zh',
+  //   showRemove:false,
+  //   showUpload:false,
+  //   autoReplace: true,
+  //   allowedFileTypes : [ 'image' ],//配置允许文件上传的类型
+  //   allowedPreviewTypes : [ 'image' ],//配置所有的被预览文件类型
+  //   allowedPreviewMimeTypes : [ 'jpg', 'png'],//控制被预览的所有mime类型
+  //   dropZoneEnabled:false, //是否显示拖拽区域
+  //   enctype : 'multipart/form-data',
+  // })
   $('#profile_form').on('submit',e => {
     e.preventDefault()
-    const formData = $(this).serialize()
+    const formData = $('#profile_form').serialize()
     $.ajax({
       url: '/settings/profile',
       type: 'post',
@@ -77,7 +92,7 @@
         const err_code = data.err_code
         if (err_code === 0) {
           window.alert('修改已保存')
-          // window.location.href = '/settings/profile'
+          window.location.href = '/settings/profile'
         } else if (err_code === 500) {
           window.alert('服务器忙，请稍后重试！')
         }
