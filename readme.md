@@ -39,7 +39,7 @@
 5.	查看博客评论区
 6.	修改、删除博客
 # 四、最终效果
-见博客 https://editor.csdn.net/md/?articleId=120806160
+见博客 https://blog.csdn.net/ladream/article/details/120806160
 # 五、文件目录结构说明
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/4ca514e1238d4871bb8fe4f369809b8c.png)
  - modules：包含需要建多个的Schema
